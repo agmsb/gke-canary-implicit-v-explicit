@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: app-canary
+spec:
+  host: app-svc
+  subsets:
+  - name: stable
+    labels:
+      release: stable
+  - name: canary
+    labels:
+      release: canary

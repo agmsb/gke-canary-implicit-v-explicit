@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deploy
+spec:
+  selector:
+    matchLabels:
+      app-name: app
+      release: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app-name: app
+        release: stable
+    spec:
+      containers:
+      - name: app
+        image: gcr.io/agmsb-lab/app@sha256:573472ee0758254ed4ddb8ede9b156f6911059f64df9244b451b3bc064d354a6
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: "100m"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RELEASE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['release']

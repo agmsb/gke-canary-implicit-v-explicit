@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deploy-canary
+spec:
+  selector:
+    matchLabels:
+      app-name: app
+      release: canary
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app-name: app
+        release: canary
+    spec:
+      containers:
+      - name: app
+        image: gcr.io/agmsb-lab/app@sha256:573472ee0758254ed4ddb8ede9b156f6911059f64df9244b451b3bc064d354a6
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RELEASE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['release']
